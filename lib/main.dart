@@ -21,13 +21,14 @@ class BleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Manual dependency wiring: data source -> repository -> use cases -> bloc.
-    const BleRepository repository = BleRepositoryImpl(BleLocalDataSourceImpl());
+    final BleRepository repository =
+        BleRepositoryImpl(BleLocalDataSourceImpl());
     return MaterialApp(
       title: 'BLE Devices',
       theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
       home: BlocProvider(
         create: (_) => BleBloc(
-          getDevices: const GetDevicesUseCase(repository),
+          getDevices: GetDevicesUseCase(repository),
           connectDevice: const ConnectDeviceUseCase(),
           disconnectDevice: const DisconnectDeviceUseCase(),
         )..add(const LoadDevices()),
