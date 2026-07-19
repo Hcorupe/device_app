@@ -1,0 +1,11 @@
+{
+  "devices": [
+    { "id": "AA:BB:CC:00:11:01", "name": "goTenna Mesh", "rssi": -42 },
+    { "id": "AA:BB:CC:00:11:02", "name": "goTenna Pro X", "rssi": -58 },
+    { "id": "AA:BB:CC:00:11:03", "name": "Heart Rate Monitor", "rssi": -67 },
+    { "id": "AA:BB:CC:00:11:01", "name": "goTenna Mesh", "rssi": -42 },
+    { "id": "AA:BB:CC:00:11:04", "name": "Thermometer", "rssi": -75 },
+    { "id": "AA:BB:CC:00:11:02", "name": "goTenna Pro X", "rssi": -58 },
+    { "id": "AA:BB:CC:00:11:05", "name": "Fitness Band", "rssi": -80 }
+  ]
+}
