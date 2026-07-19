@@ -5,6 +5,9 @@ import '../../domain/models/ble_device.dart';
 import '../bloc/ble_bloc.dart';
 
 /// A single row showing a BLE device with a connect/disconnect action.
+///
+/// The status chip lives in the subtitle (not `trailing`) so the name and id
+/// keep their full width and don't truncate/wrap.
 class DeviceTile extends StatelessWidget {
   const DeviceTile({super.key, required this.device});
 
@@ -14,29 +17,31 @@ class DeviceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final connected = device.isConnected;
     return ListTile(
+      isThreeLine: true,
       leading: Icon(
         Icons.bluetooth,
         color: connected ? Colors.blue : Colors.grey,
       ),
       title: Text(device.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Text('${device.id}   •   ${device.rssi} dBm'),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+              '${device.id}   •   ${device.rssi} dBm'),
+          const SizedBox(height: 4),
           _StatusChip(connected: connected),
-          const SizedBox(width: 8),
-          TextButton(
-            onPressed: () {
-              final bloc = context.read<BleBloc>();
-              if (connected) {
-                bloc.add(DisconnectDevice(device.id));
-              } else {
-                bloc.add(ConnectDevice(device.id));
-              }
-            },
-            child: Text(connected ? 'Disconnect' : 'Connect'),
-          ),
         ],
+      ),
+      trailing: TextButton(
+        onPressed: () {
+          final bloc = context.read<BleBloc>();
+          if (connected) {
+            bloc.add(DisconnectDevice(device.id));
+          } else {
+            bloc.add(ConnectDevice(device.id));
+          }
+        },
+        child: Text(connected ? 'Disconnect' : 'Connect'),
       ),
     );
   }
