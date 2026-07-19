@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'data/datasources/ble_local_data_source.dart';
-import 'data/repositories/ble_repository_impl.dart';
-import 'domain/repositories/ble_repository.dart';
-import 'domain/usecases/connect_device.dart';
-import 'domain/usecases/disconnect_device.dart';
-import 'domain/usecases/get_devices.dart';
-import 'presentation/bloc/ble_bloc.dart';
-import 'presentation/screens/device_list_screen.dart';
+import 'features/ble/data/datasources/ble_local_data_source.dart';
+import 'features/ble/data/repositories/ble_repository_impl.dart';
+import 'features/ble/domain/repositories/ble_repository.dart';
+import 'features/ble/domain/usecases/connect_device.dart';
+import 'features/ble/domain/usecases/disconnect_device.dart';
+import 'features/ble/domain/usecases/get_devices.dart';
+import 'features/ble/presentation/bloc/ble_bloc.dart';
+import 'features/ble/presentation/screens/device_list_screen.dart';
 
 void main() {
   runApp(const BleApp());
