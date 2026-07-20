@@ -53,9 +53,10 @@ class BleApp extends StatelessWidget {
       theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
       home: BlocProvider(
         create: (_) => BleBloc(
-          getDevices: GetDevicesUseCase(repository, logger: logger),
+          getDevices: GetDevicesUseCase(repository),
           connectDevice: const ConnectDeviceUseCase(),
           disconnectDevice: const DisconnectDeviceUseCase(),
+          logger: logger,
         )..add(const LoadDevices()),
         child: const DeviceListScreen(),
       ),

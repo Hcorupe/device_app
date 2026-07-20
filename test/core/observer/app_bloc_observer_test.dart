@@ -51,11 +51,6 @@ void main() {
   tearDown(() => bloc.close());
 
   group('AppBlocObserver', () {
-    test('onCreate logs the bloc type at debug', () {
-      observer.onCreate(bloc);
-      expect(logger.debugs.single, allOf(contains('onCreate'), contains('_CounterBloc')));
-    });
-
     test('onEvent logs the event at debug', () {
       observer.onEvent(bloc, 'tick');
       expect(logger.debugs.single, allOf(contains('onEvent'), contains('tick')));
@@ -64,11 +59,6 @@ void main() {
     test('onChange logs the change at debug', () {
       observer.onChange(bloc, const Change(currentState: 0, nextState: 1));
       expect(logger.debugs.single, contains('onChange'));
-    });
-
-    test('onClose logs the bloc type at debug', () {
-      observer.onClose(bloc);
-      expect(logger.debugs.single, contains('onClose'));
     });
 
     test('onError forwards the error and stack trace to logger.error', () {

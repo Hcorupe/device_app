@@ -10,12 +10,6 @@ class AppBlocObserver extends BlocObserver {
   final AppLogger _log;
 
   @override
-  void onCreate(BlocBase bloc) {
-    super.onCreate(bloc);
-    _log.debug('onCreate ${bloc.runtimeType}');
-  }
-
-  @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
     _log.debug('onEvent ${bloc.runtimeType} $event');
@@ -31,11 +25,5 @@ class AppBlocObserver extends BlocObserver {
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     _log.error('onError ${bloc.runtimeType}', error, stackTrace);
     super.onError(bloc, error, stackTrace);
-  }
-
-  @override
-  void onClose(BlocBase bloc) {
-    super.onClose(bloc);
-    _log.debug('onClose ${bloc.runtimeType}');
   }
 }

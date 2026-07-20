@@ -15,7 +15,8 @@ abstract class BleLocalDataSource {
 class BleLocalDataSourceImpl implements BleLocalDataSource {
   /// [bundle] is the asset source, defaulting to the app's [rootBundle]. It is
   /// injectable so tests can supply asset contents without the real bundle.
-  /// [logger] defaults to a no-op; failures are logged at the point they occur.
+  /// [logger] defaults to a no-op; used for a load breadcrumb. Failures are
+  /// allowed to propagate and are logged once by the caller (the bloc).
   BleLocalDataSourceImpl({
     AssetBundle? bundle,
     AppLogger logger = const NoopAppLogger(),
@@ -29,18 +30,13 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
 
   @override
   Future<List<BleDeviceModel>> getDevices() async {
-    try {
-      final raw = await _bundle.loadString(assetPath);
-      final json = jsonDecode(raw) as Map<String, dynamic>;
-      final devices = json['devices'] as List<dynamic>;
-      final models = devices
-          .map((e) => BleDeviceModel.fromJson(e as Map<String, dynamic>))
-          .toList();
-      _logger.debug('Loaded ${models.length} devices from $assetPath');
-      return models;
-    } catch (error, stackTrace) {
-      _logger.error('Failed to load devices from $assetPath', error, stackTrace);
-      rethrow;
-    }
+    final raw = await _bundle.loadString(assetPath);
+    final json = jsonDecode(raw) as Map<String, dynamic>;
+    final devices = json['devices'] as List<dynamic>;
+    final models = devices
+        .map((e) => BleDeviceModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+    _logger.debug('Loaded ${models.length} devices from $assetPath');
+    return models;
   }
 }

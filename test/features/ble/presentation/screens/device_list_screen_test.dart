@@ -1,5 +1,6 @@
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:device_app/core/error/failure.dart';
 import 'package:device_app/features/ble/domain/models/ble_device.dart';
 import 'package:device_app/features/ble/presentation/bloc/ble_bloc.dart';
 import 'package:device_app/features/ble/presentation/screens/device_list_screen.dart';
@@ -43,9 +44,9 @@ void main() {
     testWidgets('shows the error message on error', (tester) async {
       await pumpWithState(
         tester,
-        const BleState(status: BleStatus.error, errorMessage: 'boom'),
+        const BleState(status: BleStatus.error, failure: DeviceLoadFailure()),
       );
-      expect(find.text('Error: boom'), findsOneWidget);
+      expect(find.text(const DeviceLoadFailure().message), findsOneWidget);
     });
 
     testWidgets('shows an empty message when loaded with no devices',

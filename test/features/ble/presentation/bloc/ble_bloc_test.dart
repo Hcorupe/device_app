@@ -1,5 +1,6 @@
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:device_app/core/error/failure.dart';
 import 'package:device_app/features/ble/domain/models/ble_device.dart';
 import 'package:device_app/features/ble/domain/usecases/connect_device.dart';
 import 'package:device_app/features/ble/domain/usecases/disconnect_device.dart';
@@ -81,7 +82,7 @@ void main() {
         const BleState(status: BleStatus.loading),
         isA<BleState>()
             .having((s) => s.status, 'status', BleStatus.error)
-            .having((s) => s.errorMessage, 'errorMessage', contains('boom')),
+            .having((s) => s.failure, 'failure', isA<DeviceLoadFailure>()),
       ],
     );
   });

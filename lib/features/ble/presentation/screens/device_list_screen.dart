@@ -28,7 +28,9 @@ class DeviceListScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             case BleStatus.error:
               return Center(
-                child: Text('Error: ${state.errorMessage ?? 'unknown'}'),
+                child: Text(
+                  state.failure?.message ?? 'Something went wrong.',
+                ),
               );
             case BleStatus.loaded:
               if (state.devices.isEmpty) {

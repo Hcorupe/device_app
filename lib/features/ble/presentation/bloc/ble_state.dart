@@ -6,25 +6,25 @@ class BleState extends Equatable {
   const BleState({
     this.status = BleStatus.initial,
     this.devices = const [],
-    this.errorMessage,
+    this.failure,
   });
 
   final BleStatus status;
   final List<BleDevice> devices;
-  final String? errorMessage;
+  final Failure? failure;
 
   BleState copyWith({
     BleStatus? status,
     List<BleDevice>? devices,
-    String? errorMessage,
+    Failure? failure,
   }) {
     return BleState(
       status: status ?? this.status,
       devices: devices ?? this.devices,
-      errorMessage: errorMessage ?? this.errorMessage,
+      failure: failure ?? this.failure,
     );
   }
 
   @override
-  List<Object?> get props => [status, devices, errorMessage];
+  List<Object?> get props => [status, devices, failure];
 }
