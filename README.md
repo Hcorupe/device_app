@@ -238,6 +238,16 @@ The upside of the layering is that most of that is a data-layer swap. The use
 cases, the bloc, and the widgets wouldn't change much, because they only depend
 on the `BleRepository` interface.
 
+That mocking is also why the bloc's handlers aren't symmetrical.
+`_onLoadDevices` is `async` and wrapped in try/catch, because it awaits the data
+source and asset loading or JSON parsing can genuinely fail. `_onConnectDevice`
+and `_onDisconnectDevice` are neither: connect/disconnect is a pure in-memory
+list transformation that returns synchronously and can't throw, so `async` would
+await nothing and a try/catch would guard nothing. With a real BLE stack those
+two become async, fallible I/O (timeout, out of range, Bluetooth off), and
+they'd grow the same `async` + try/catch treatment, mapping errors to `Failure`
+cases. The asymmetry is deliberate, not an oversight.
+
 One detail worth calling out: the JSON has duplicate device ids in it. Deduping
 is a business rule, so it happens in the domain (`GetDevicesUseCase`), keeping
 the first of each id. The data source hands back whatever is in the file.
