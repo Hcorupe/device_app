@@ -7,8 +7,8 @@ Bluetooth is mocked, and the focus is on how the app is put together.
 
 ## Screenshots
 
-| Device list | Some devices connected | Load error |
-|---|---|---|
+| Device list | Some devices connected | Error                                |
+|---|---|--------------------------------------|
 | ![Device list](screenshots/devices.png) | ![Some devices connected](screenshots/connected.png) | ![Load error](screenshots/error.png) |
 
 There's a loading spinner too, but since the data comes from a bundled asset the
