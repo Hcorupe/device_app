@@ -28,6 +28,7 @@ dev_dependencies:
   mocktail: ^1.0.0
 
 
+
 flutter:
   uses-material-design: true
   # Mock BLE device data bundled with the app.
