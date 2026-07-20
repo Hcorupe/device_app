@@ -1,7 +1,7 @@
 import '../../domain/models/ble_device.dart';
 
 /// Data-layer DTO for the JSON wire format. A pure data holder: it knows how to
-/// (de)serialize JSON and how to map to the [BleDevice] domain entity, and
+/// deserialize JSON and how to map to the [BleDevice] domain entity, and
 /// nothing about runtime concerns like connection status.
 class BleDeviceModel {
   const BleDeviceModel({

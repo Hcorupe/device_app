@@ -17,6 +17,7 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
   /// injectable so tests can supply asset contents without the real bundle.
   /// [logger] defaults to a no-op; used for a load breadcrumb. Failures are
   /// allowed to propagate and are logged once by the caller (the bloc).
+  /// [loadDelay] simulates load latency and defaults to zero (kept zero in tests).
   BleLocalDataSourceImpl({
     AssetBundle? bundle,
     AppLogger logger = const NoopAppLogger(),

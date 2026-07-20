@@ -4,8 +4,8 @@ import 'package:equatable/equatable.dart';
 /// the underlying technical cause is logged separately, never surfaced in the UI.
 ///
 /// Sealed so the set of failures is explicit and exhaustive. A real BLE stack
-/// would add cases here — e.g. `PermissionDeniedFailure`, `BluetoothOffFailure`,
-/// `ConnectionTimeoutFailure` — each with its own message and recovery hint.
+/// would add cases here (`PermissionDeniedFailure`, `BluetoothOffFailure`,
+/// `ConnectionTimeoutFailure`), each with its own message and recovery hint.
 sealed class Failure extends Equatable {
   const Failure();
 

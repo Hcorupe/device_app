@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../logging/app_logger.dart';
 
-/// Centralized logging of bloc lifecycle and state changes. Register once via
-/// `Bloc.observer = AppBlocObserver(logger)` — no bloc needs to know about it.
+/// Centralized logging of bloc events, state changes, and errors. Register once
+/// via `Bloc.observer = AppBlocObserver(logger)`, so no bloc needs to know about it.
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver(this._log);
 
