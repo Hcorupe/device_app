@@ -3,7 +3,8 @@ import 'package:device_app/features/ble/domain/models/ble_device.dart';
 import 'package:device_app/features/ble/domain/usecases/get_devices.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../helpers/fake_repositories.dart';
+import '../../helpers/fake_repositories.dart';
+
 
 
 

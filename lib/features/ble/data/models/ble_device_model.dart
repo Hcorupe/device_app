@@ -22,7 +22,5 @@ class BleDeviceModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'rssi': rssi};
-
   BleDevice toEntity() => BleDevice(id: id, name: name, rssi: rssi);
 }
