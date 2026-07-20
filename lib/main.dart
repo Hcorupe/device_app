@@ -1,3 +1,6 @@
+import 'dart:ui' show PlatformDispatcher;
+
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,8 +17,24 @@ import 'features/ble/presentation/bloc/ble_bloc.dart';
 import 'features/ble/presentation/screens/device_list_screen.dart';
 
 void main() {
+  // Render Equatable objects with their fields so event/state logs are readable
+  // (e.g. "ConnectDevice(AA:BB:11:02)" rather than just "ConnectDevice").
+  EquatableConfig.stringify = true;
+
   const AppLogger logger = DevAppLogger();
   Bloc.observer = const AppBlocObserver(logger);
+
+  // Safety net: route uncaught framework and platform errors into the logger
+  // (this is where a crash reporter like Crashlytics/Sentry would hook in).
+  FlutterError.onError = (details) {
+    logger.error('FlutterError', details.exception, details.stack);
+    FlutterError.presentError(details);
+  };
+  PlatformDispatcher.instance.onError = (error, stackTrace) {
+    logger.error('Uncaught platform error', error, stackTrace);
+    return true;
+  };
+
   runApp(const BleApp(logger: logger));
 }
 
@@ -34,7 +53,7 @@ class BleApp extends StatelessWidget {
       theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
       home: BlocProvider(
         create: (_) => BleBloc(
-          getDevices: GetDevicesUseCase(repository),
+          getDevices: GetDevicesUseCase(repository, logger: logger),
           connectDevice: const ConnectDeviceUseCase(),
           disconnectDevice: const DisconnectDeviceUseCase(),
         )..add(const LoadDevices()),

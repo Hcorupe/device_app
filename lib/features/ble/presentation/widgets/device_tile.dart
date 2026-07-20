@@ -8,8 +8,7 @@ import '../bloc/ble_bloc.dart';
 ///
 /// Laid out as a three-line [ListTile]: the name is the title, the subtitle
 /// stacks the id/rssi line above a status chip, and the `trailing` slot holds
-/// the connect/disconnect button. (The chip goes in the subtitle rather than
-/// `trailing` because `trailing` is reserved for that button.)
+/// the connect/disconnect button.
 class DeviceTile extends StatelessWidget {
   const DeviceTile({super.key, required this.device});
 

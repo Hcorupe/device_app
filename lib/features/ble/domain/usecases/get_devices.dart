@@ -1,3 +1,4 @@
+import '../../../../core/logging/app_logger.dart';
 import '../models/ble_device.dart';
 import '../repositories/ble_repository.dart';
 
@@ -5,13 +6,19 @@ import '../repositories/ble_repository.dart';
 /// keeping the first occurrence. Deduplication is business logic, so it lives
 /// in the domain layer.
 class GetDevicesUseCase {
-  const GetDevicesUseCase(this._repository);
+  const GetDevicesUseCase(
+      this._repository, {
+        AppLogger logger = const NoopAppLogger(),
+      }) : _logger = logger;
 
   final BleRepository _repository;
+  final AppLogger _logger;
 
   Future<List<BleDevice>> call() async {
     final devices = await _repository.getDevices();
-    return devices.distinctById();
+    final unique = devices.distinctById();
+    _logger.debug('Deduped ${devices.length} -> ${unique.length} devices');
+    return unique;
   }
 }
 
