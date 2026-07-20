@@ -17,11 +17,12 @@ class BleState extends Equatable {
     BleStatus? status,
     List<BleDevice>? devices,
     Failure? failure,
+    bool clearFailure = false,
   }) {
     return BleState(
       status: status ?? this.status,
       devices: devices ?? this.devices,
-      failure: failure ?? this.failure,
+      failure: clearFailure ? null : (failure ?? this.failure),
     );
   }
 

@@ -36,7 +36,7 @@ class BleBloc extends Bloc<BleEvent, BleState> {
     LoadDevices event,
     Emitter<BleState> emit,
   ) async {
-    emit(state.copyWith(status: BleStatus.loading));
+    emit(state.copyWith(status: BleStatus.loading, clearFailure: true));
     try {
       final devices = await _getDevices();
       emit(state.copyWith(status: BleStatus.loaded, devices: devices));
