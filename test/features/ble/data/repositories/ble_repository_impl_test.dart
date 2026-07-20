@@ -1,4 +1,3 @@
-
 import 'package:device_app/features/ble/data/datasources/ble_local_data_source.dart';
 import 'package:device_app/features/ble/data/models/ble_device_model.dart';
 import 'package:device_app/features/ble/data/repositories/ble_repository_impl.dart';
@@ -17,7 +16,8 @@ class _FakeLocalDataSource implements BleLocalDataSource {
 
 void main() {
   group('BleRepositoryImpl.getDevices', () {
-    test('maps each DTO to a domain entity, preserving fields and order', () async {
+    test('maps each DTO to a domain entity, preserving fields and order',
+        () async {
       const repository = BleRepositoryImpl(_FakeLocalDataSource([
         BleDeviceModel(id: 'AA:BB:11:01', name: 'Alpha', rssi: -40),
         BleDeviceModel(id: 'AA:BB:11:02', name: 'Bravo', rssi: -50),

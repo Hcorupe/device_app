@@ -1,4 +1,3 @@
-
 import 'package:device_app/core/logging/app_logger.dart';
 import 'package:device_app/core/observer/app_bloc_observer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +52,8 @@ void main() {
   group('AppBlocObserver', () {
     test('onEvent logs the event at debug', () {
       observer.onEvent(bloc, 'tick');
-      expect(logger.debugs.single, allOf(contains('onEvent'), contains('tick')));
+      expect(
+          logger.debugs.single, allOf(contains('onEvent'), contains('tick')));
     });
 
     test('onChange logs the change at debug', () {

@@ -7,8 +7,8 @@ class DisconnectDeviceUseCase {
   List<BleDevice> call(List<BleDevice> devices, String id) {
     return devices
         .map((d) => d.id == id
-        ? d.copyWith(connectionStatus: ConnectionStatus.disconnected)
-        : d)
+            ? d.copyWith(connectionStatus: ConnectionStatus.disconnected)
+            : d)
         .toList();
   }
 }

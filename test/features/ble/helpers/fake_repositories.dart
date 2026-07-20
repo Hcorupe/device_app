@@ -1,5 +1,3 @@
-
-
 import 'package:device_app/features/ble/domain/models/ble_device.dart';
 import 'package:device_app/features/ble/domain/repositories/ble_repository.dart';
 

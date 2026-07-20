@@ -1,4 +1,3 @@
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:device_app/core/error/failure.dart';
 import 'package:device_app/features/ble/domain/models/ble_device.dart';

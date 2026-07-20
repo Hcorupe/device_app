@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:device_app/features/ble/data/datasources/ble_local_data_source.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';

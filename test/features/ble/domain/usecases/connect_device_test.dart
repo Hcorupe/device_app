@@ -1,4 +1,3 @@
-
 import 'package:device_app/features/ble/domain/models/ble_device.dart';
 import 'package:device_app/features/ble/domain/usecases/connect_device.dart';
 import 'package:flutter_test/flutter_test.dart';

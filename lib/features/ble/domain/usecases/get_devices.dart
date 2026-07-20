@@ -24,5 +24,3 @@ extension DedupById on Iterable<BleDevice> {
     return where((d) => seen.add(d.id)).toList();
   }
 }
-
-

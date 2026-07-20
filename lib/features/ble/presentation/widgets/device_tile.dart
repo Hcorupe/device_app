@@ -27,8 +27,7 @@ class DeviceTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-              '${device.id}   •   ${device.rssi} dBm'),
+          Text('${device.id}   •   ${device.rssi} dBm'),
           const SizedBox(height: 4),
           _StatusChip(connected: connected),
         ],

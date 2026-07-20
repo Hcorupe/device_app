@@ -1,4 +1,3 @@
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:device_app/features/ble/domain/models/ble_device.dart';
 import 'package:device_app/features/ble/presentation/bloc/ble_bloc.dart';
@@ -41,7 +40,8 @@ void main() {
   );
 
   group('DeviceTile', () {
-    testWidgets('renders name, id/rssi and a Disconnected chip', (tester) async {
+    testWidgets('renders name, id/rssi and a Disconnected chip',
+        (tester) async {
       await pumpTile(tester, disconnected);
       expect(find.text('Alpha'), findsOneWidget);
       expect(find.text('AA:BB:11:01   •   -40 dBm'), findsOneWidget);
