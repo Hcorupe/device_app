@@ -20,16 +20,20 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
   BleLocalDataSourceImpl({
     AssetBundle? bundle,
     AppLogger logger = const NoopAppLogger(),
+    Duration loadDelay = Duration.zero,
     this.assetPath = 'assets/devices.json',
   })  : _bundle = bundle ?? rootBundle,
-        _logger = logger;
+        _logger = logger,
+        _loadDelay = loadDelay;
 
+  final Duration _loadDelay;
   final AssetBundle _bundle;
   final AppLogger _logger;
   final String assetPath;
 
   @override
   Future<List<BleDeviceModel>> getDevices() async {
+    await Future<void>.delayed(_loadDelay);
     final raw = await _bundle.loadString(assetPath);
     final json = jsonDecode(raw) as Map<String, dynamic>;
     final devices = json['devices'] as List<dynamic>;
