@@ -1,6 +1,7 @@
 import 'dart:ui' show PlatformDispatcher;
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,7 @@ import 'features/ble/presentation/screens/device_list_screen.dart';
 void main() {
   // Render Equatable objects with their fields so event/state logs are readable
   // (e.g. "ConnectDevice(AA:BB:11:02)" rather than just "ConnectDevice").
-  EquatableConfig.stringify = true;
+  EquatableConfig.stringify = kDebugMode;
 
   const AppLogger logger = DevAppLogger();
   Bloc.observer = const AppBlocObserver(logger);

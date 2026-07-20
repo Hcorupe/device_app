@@ -5,6 +5,16 @@ from each one. The brief was to parse the device data from JSON and simulate the
 connections rather than talk to a real BLE device — so that's what it does. The
 Bluetooth is mocked, and the focus is on how the app is put together. 
 
+## Screenshots
+
+| Device list | Some devices connected | Load error |
+|---|---|---|
+| ![Device list](screenshots/devices.png) | ![Some devices connected](screenshots/connected.png) | ![Load error](screenshots/error.png) |
+
+There's a loading spinner too, but since the data comes from a bundled asset the
+list loads instantly, so you won't actually catch it on screen. It's there (and
+tested) for when the data source becomes a real async scan.
+
 ## Running it
 
 ```
