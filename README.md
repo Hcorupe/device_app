@@ -264,6 +264,21 @@ A `BlocObserver` logs state changes and errors centrally, and there are a couple
 of global handlers in `main` for anything that slips through. I kept it light on
 purpose. I didn't want logging just for the sake of it.
 
+Sample output from a debug run (load, then connect the first device):
+
+```
+[ble_devices] onEvent BleBloc LoadDevices()
+[ble_devices] onChange BleBloc Change { currentState: BleState(BleStatus.initial, [], null), nextState: BleState(BleStatus.loading, [], null) }
+[ble_devices] Loaded 7 devices from assets/devices.json
+[ble_devices] onChange BleBloc Change { currentState: BleState(BleStatus.loading, [], null), nextState: BleState(BleStatus.loaded, [BleDevice(AA:BB:11:01, goTenna Mesh, -42, ConnectionStatus.disconnected), BleDevice(AA:BB:11:02, goTenna Pro X, -58, ConnectionStatus.disconnected), BleDevice(AA:BB:11:03, Heart Rate Monitor, -67, ConnectionStatus.disconnected), BleDevice(AA:BB:11:04, Thermometer, -75, ConnectionStatus.disconnected), BleDevice(AA:BB:11:05, Fitness Band, -80, ConnectionStatus.disconnected)], null) }
+[ble_devices] onEvent BleBloc ConnectDevice(AA:BB:11:01)
+[ble_devices] onChange BleBloc Change { currentState: BleState(BleStatus.loaded, [...ConnectionStatus.disconnected...], null), nextState: BleState(BleStatus.loaded, [BleDevice(AA:BB:11:01, goTenna Mesh, -42, ConnectionStatus.connected), ...], null) }
+```
+
+Note the `Loaded 7 devices` line followed by a state holding only 5: the asset
+has duplicate ids, and dedup in `GetDevicesUseCase` keeps the first of each. The
+`BlocObserver` output is the trace showing it happen.
+
 ## Tests
 
 `flutter test` runs everything. There's coverage at each layer: the dedup
