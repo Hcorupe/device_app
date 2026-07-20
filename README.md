@@ -7,9 +7,9 @@ Bluetooth is mocked, and the focus is on how the app is put together.
 
 ## Screenshots
 
-| Loading | Loaded | Connected | Error |
+| Loading | Devices found | Connected | Error |
 |---|---|---|---|
-| ![Loading](screenshots/loading.png) | ![Loaded](screenshots/loaded.png) | ![Connected](screenshots/connected.png) | ![Error](screenshots/error.png) |
+| ![Loading](screenshots/loading.png) | ![Devices found](screenshots/loaded.png) | ![Connected](screenshots/connected.png) | ![Error](screenshots/error.png) |
 
 The list loads asynchronously with a short simulated delay, so you get a real
 loading spinner on launch instead of the data just popping in. The delay is
@@ -26,7 +26,55 @@ flutter run
 
 `flutter test` runs the tests, `flutter analyze` runs the analyzer.
 
+
 ## How it's laid out
+
+```
+lib/
+├── main.dart                         # Entry point; hand-wired DI + global error handlers
+├── core/                             # Cross-cutting concerns, feature-agnostic
+│   ├── error/
+│   │   └── failure.dart              # Failure type carrying a UI-friendly message
+│   ├── logging/
+│   │   ├── app_logger.dart           # AppLogger interface (no package dependency)
+│   │   └── dev_logger.dart           # Impl wrapping dart:developer
+│   └── observer/
+│       └── app_bloc_observer.dart    # Central logging of bloc state changes + errors
+└── features/
+    └── ble/                          # The BLE feature, split by layer
+        ├── domain/                   # Business rules — plain Dart, no Flutter
+        │   ├── models/
+        │   │   └── ble_device.dart       # BleDevice entity
+        │   ├── repositories/
+        │   │   └── ble_repository.dart    # Repository interface (the boundary)
+        │   └── usecases/
+        │       ├── get_devices.dart       # Loads + dedupes by id
+        │       ├── connect_device.dart
+        │       └── disconnect_device.dart
+        ├── data/                     # Where data comes from
+        │   ├── datasources/
+        │   │   └── ble_local_data_source.dart  # Reads bundled JSON asset
+        │   ├── models/
+        │   │   └── ble_device_model.dart       # JSON <-> domain mapping
+        │   └── repositories/
+        │       └── ble_repository_impl.dart    # Implements the domain interface
+        └── presentation/             # BLoC + widgets
+            ├── bloc/
+            │   ├── ble_bloc.dart
+            │   ├── ble_event.dart
+            │   └── ble_state.dart          # Single state, status enum
+            ├── screens/
+            │   └── device_list_screen.dart
+            └── widgets/
+                └── device_tile.dart
+
+assets/
+└── devices.json                      # Mocked device data (stands in for a scan)
+
+test/                                 # Mirrors lib/ — coverage at every layer
+├── core/observer/
+└── features/ble/{domain,data,presentation,helpers}/
+```
 
 Clean architecture, organized by feature. Everything BLE-related lives under
 `lib/features/ble`, split into three layers:
@@ -44,6 +92,132 @@ the repository interface. Cross-cutting stuff (logging) sits in `lib/core`.
 State is handled with flutter_bloc. There's a single `BleState` with a status
 enum (initial / loading / loaded / error), and the screen just draws whatever
 the current state happens to be.
+
+## Class diagram
+
+The core types and how they depend on each other. Note the direction of the
+arrows: presentation depends on domain, data implements domain, and the domain
+depends on nothing outward.
+
+```mermaid
+classDiagram
+    direction LR
+
+    %% ---- Domain ----
+    class BleDevice {
+      +String id
+      +String name
+      +int rssi
+      +ConnectionStatus connectionStatus
+      +bool isConnected
+      +copyWith() BleDevice
+    }
+    class ConnectionStatus {
+      <<enumeration>>
+      disconnected
+      connected
+    }
+    class BleRepository {
+      <<interface>>
+      +getDevices() Future~List~BleDevice~~
+    }
+    class GetDevicesUseCase {
+      +call() Future~List~BleDevice~~
+      +distinctById() dedups
+    }
+    class ConnectDeviceUseCase {
+      +call(devices, id) List~BleDevice~
+    }
+    class DisconnectDeviceUseCase {
+      +call(devices, id) List~BleDevice~
+    }
+
+    %% ---- Data ----
+    class BleDeviceModel {
+      +String id
+      +String name
+      +int rssi
+      +fromJson(json) BleDeviceModel
+      +toEntity() BleDevice
+    }
+    class BleLocalDataSource {
+      <<interface>>
+      +getDevices() Future~List~BleDeviceModel~~
+    }
+    class BleLocalDataSourceImpl {
+      +getDevices() Future~List~BleDeviceModel~~
+    }
+    class BleRepositoryImpl {
+      +getDevices() Future~List~BleDevice~~
+    }
+
+    %% ---- Presentation ----
+    class BleBloc {
+      +on LoadDevices
+      +on ConnectDevice
+      +on DisconnectDevice
+    }
+    class BleState {
+      +BleStatus status
+      +List~BleDevice~ devices
+      +Failure? failure
+      +copyWith() BleState
+    }
+    class BleStatus {
+      <<enumeration>>
+      initial
+      loading
+      loaded
+      error
+    }
+    class BleEvent {
+      <<abstract>>
+    }
+    class LoadDevices
+    class ConnectDevice {
+      +String id
+    }
+    class DisconnectDevice {
+      +String id
+    }
+
+    %% ---- Core ----
+    class Failure {
+      <<sealed>>
+      +String message
+    }
+    class DeviceLoadFailure
+    class AppLogger {
+      <<interface>>
+      +debug(msg)
+      +info(msg)
+      +warning(msg)
+      +error(msg, err, stack)
+    }
+
+    %% ---- Relationships ----
+    BleDevice --> ConnectionStatus
+    GetDevicesUseCase --> BleRepository : uses
+    BleRepositoryImpl ..|> BleRepository
+    BleLocalDataSourceImpl ..|> BleLocalDataSource
+    BleRepositoryImpl --> BleLocalDataSource : uses
+    BleRepositoryImpl ..> BleDeviceModel : maps
+    BleDeviceModel ..> BleDevice : toEntity()
+
+    BleBloc --> GetDevicesUseCase
+    BleBloc --> ConnectDeviceUseCase
+    BleBloc --> DisconnectDeviceUseCase
+    BleBloc --> AppLogger
+    BleBloc ..> BleState : emits
+    BleBloc ..> BleEvent : handles
+    BleState --> BleDevice
+    BleState --> BleStatus
+    BleState --> Failure
+    LoadDevices --|> BleEvent
+    ConnectDevice --|> BleEvent
+    DisconnectDevice --|> BleEvent
+    DeviceLoadFailure --|> Failure
+```
 
 ## What's real and what isn't
 
